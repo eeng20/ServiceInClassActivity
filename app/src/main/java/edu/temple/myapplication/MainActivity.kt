@@ -15,6 +15,7 @@ import android.widget.TextView
 class MainActivity : AppCompatActivity() {
     var isConnected = false
     lateinit var timerBinder: TimerService.TimerBinder
+    val initialValue = 100
 
     val timerHandler = Handler(Looper.getMainLooper()) {
         findViewById<TextView>(R.id.textView).text = it.what.toString()
@@ -46,20 +47,18 @@ class MainActivity : AppCompatActivity() {
         var paused = true
         with (findViewById<Button>(R.id.startButton)){
             setOnClickListener {
-                if (paused) {
-                    if (text == "Start") {
-                        timerBinder.start(100)
-                        text = "Pause"
-                    }
-                    else if (text == "Resume") {
-                        timerBinder.pause()
-                        text = "Pause"
-                    }
-                    else {
-                        timerBinder.pause()
-                        text = "Resume"
-                        paused = true
-                    }
+                if (text == "Start") {
+                    timerBinder.start(initialValue)
+                    text = "Pause"
+                }
+                else if (text == "Resume") {
+                    timerBinder.pause()
+                    text = "Pause"
+                }
+                else {
+                    timerBinder.pause()
+                    text = "Resume"
+                    paused = true
                 }
             }
         }
@@ -67,8 +66,6 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.stopButton).setOnClickListener {
             if (isConnected) {
                 timerBinder.stop()
-                paused = true
-                isConnected = false
                 findViewById<Button>(R.id.startButton).text = "Start"
             }
         }
